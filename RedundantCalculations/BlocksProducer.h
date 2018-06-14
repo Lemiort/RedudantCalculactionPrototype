@@ -15,7 +15,7 @@ public:
 
 	BlocksPool blocksDeque;
 	int blockSize = 512;
-	int blocksCount = 512;
+	int blocksCount = 512*10;
 private:
 	//infinite loop
 	void Run();
