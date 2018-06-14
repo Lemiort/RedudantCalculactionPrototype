@@ -2,26 +2,28 @@
 #include "typedefs.h"
 #include <mutex>
 #include <atomic>
+#include "IAsyncProcessor.h"
 
 
 
-class BlocksProducer
+class BlocksProducer:public IAsyncProcessor
 {
 public:
-	BlocksProducer(BlocksPool blocksDeque);
-	void Start();
-	void Stop();
+	BlocksProducer(BlocksPoolPtr blocksDeque, MutexPtr dequeLock);
+	virtual void Start();
+	virtual void Stop();
 	virtual ~BlocksProducer();
 
-	BlocksPool blocksDeque;
-	int blockSize = 512;
-	int blocksCount = 512*10;
+	
 private:
 	//infinite loop
-	void Run();
+	virtual void Run();
 	BlockPtr GenerateBlock();
 	
-	//std::mutex dequeLock;
+	MutexPtr dequeLock;
+	BlocksPoolPtr blocksDeque;
+	int blockSize = 512;
+	int blocksCount = 512 * 10;
 
 	//do Run() while this flag true
 	std::atomic_bool doRun = false;

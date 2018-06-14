@@ -3,9 +3,10 @@
 #include <thread>
 #include <random>
 
-BlocksProducer::BlocksProducer(BlocksPool blocksDeque)
+BlocksProducer::BlocksProducer(BlocksPoolPtr blocksDeque, MutexPtr dequeLock)
 {
 	this->blocksDeque = blocksDeque;
+	this->dequeLock = dequeLock;
 }
 
 void BlocksProducer::Start()
@@ -32,7 +33,9 @@ void BlocksProducer::Run()
 		if (this->blocksDeque->size() < this->blocksCount)
 		{
 			BlockPtr block = this->GenerateBlock();
+			this->dequeLock->lock();
 			this->blocksDeque->push_back(block);
+			this->dequeLock->unlock();
 		}
 	}
 }
