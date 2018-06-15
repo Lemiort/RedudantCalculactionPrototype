@@ -33,9 +33,10 @@ void BlocksProducer::Run()
 		if (this->blocksDeque->size() < this->blocksCount)
 		{
 			BlockPtr block = this->GenerateBlock();
-			this->dequeLock->lock();
-			this->blocksDeque->push_back(block);
-			this->dequeLock->unlock();
+			{
+				std::lock_guard<std::mutex> lock(*dequeLock);
+				this->blocksDeque->push_back(block);
+			}
 		}
 	}
 }

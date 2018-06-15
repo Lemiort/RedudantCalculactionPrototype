@@ -10,7 +10,7 @@
 class BlocksConsumer: public IAsyncProcessor
 {
 public:
-	BlocksConsumer(BlocksPoolPtr blocksDeque, BlocksCrcsPtr blocksCrcs);
+	BlocksConsumer(BlocksPoolPtr blocksDeque, MutexPtr dequeLock, BlocksCrcsPtr blocksCrcs);
 	~BlocksConsumer();
 	virtual void Start();
 	virtual void Stop();
@@ -19,6 +19,7 @@ public:
 private:
 	virtual void Run();
 	uint32_t Crc32(BlockPtr block);
+	MutexPtr dequeLock;
 
 	//do Run() while this flag true
 	std::atomic_bool doRun = false;

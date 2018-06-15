@@ -8,10 +8,11 @@
 /* CRC-32 (Ethernet, ZIP, etc.) polynomial in reversed bit order. */
 /* #define POLY 0xedb88320 */
 
-BlocksConsumer::BlocksConsumer(BlocksPoolPtr blocksDeque, BlocksCrcsPtr blocksCrcs)
+BlocksConsumer::BlocksConsumer(BlocksPoolPtr blocksDeque, MutexPtr dequeLock, BlocksCrcsPtr blocksCrcs)
 {
 	this->blocksDeque = blocksDeque;
 	this->blocksCrcs = blocksCrcs;
+	this->dequeLock = dequeLock;
 }
 
 
@@ -33,20 +34,35 @@ void BlocksConsumer::Stop()
 
 void BlocksConsumer::Run()
 {
+	//std::deque<BlockPtr>::iterator it = this->blocksDeque->begin();
 	while (doRun)
 	{
-		auto it = this->blocksDeque->begin();
-		//try to find in crcs
-		for (; it != this->blocksDeque->end(); it++)
+		if (this->blocksDeque->size() > 0)
 		{
-			if (this->blocksCrcs->count(*it) == 0)
-				break;
-		}
-		//first not calculated block  was found
-		if (it != this->blocksDeque->end())
-		{
-			auto crc = this->Crc32(*it);
-			this->blocksCrcs->insert(std::pair<BlockPtr, uint32_t>(*it, crc));
+			BlockPtr block;
+
+			//try to find in crcs
+			{
+				std::lock_guard<std::mutex> lock(*dequeLock);
+				for (const auto& elem : *blocksDeque) 
+				{
+					if (blocksCrcs->count(elem) == 0)
+					{
+						block = elem;
+						break;
+					}
+				}
+			}
+			
+			dequeLock->lock();
+			//first not calculated block  was found
+			if ( (bool)block != false )
+			{
+				auto crc = this->Crc32(block);
+				this->blocksCrcs->insert(std::pair<BlockPtr, uint32_t>(block, crc));
+			}
+			dequeLock->unlock();
+			//it++;
 		}
 	}
 }
