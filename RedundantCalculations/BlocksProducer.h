@@ -14,7 +14,8 @@ public:
 	virtual void Stop();
 	virtual ~BlocksProducer();
 
-	
+	int blockSize = 512;
+	int blocksCount = 512 * 10;
 private:
 	//infinite loop
 	virtual void Run();
@@ -22,8 +23,7 @@ private:
 	
 	MutexPtr dequeLock;
 	BlocksPoolPtr blocksDeque;
-	int blockSize = 512;
-	int blocksCount = 512 * 10;
+
 
 	//do Run() while this flag true
 	std::atomic_bool doRun = false;
