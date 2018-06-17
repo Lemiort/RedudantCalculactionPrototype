@@ -3,10 +3,12 @@
 #include <thread>
 #include <random>
 
-BlocksProducer::BlocksProducer(BlocksPoolPtr blocksDeque, MutexPtr dequeLock)
+BlocksProducer::BlocksProducer(BlocksPoolPtr blocksDeque, MutexPtr dequeLock, int prodcuersCount, SemaphorePtr readSemaphore)
 {
 	this->blocksDeque = blocksDeque;
 	this->dequeLock = dequeLock;
+	this->dequeReadSemaphore = readSemaphore;
+	this->producersCount = producersCount;
 }
 
 void BlocksProducer::Start()
@@ -35,7 +37,18 @@ void BlocksProducer::Run()
 			BlockPtr block = this->GenerateBlock();
 			{
 				std::lock_guard<std::mutex> lock(*dequeLock);
+				for (int i = 0; i < producersCount; i++)
+				{
+					//wait until producers read blocks
+					dequeReadSemaphore->wait();
+				}
 				this->blocksDeque->push_back(block);
+
+				for (int i = 0; i < producersCount; i++)
+				{
+					//let producers read
+					dequeReadSemaphore->notify();
+				}
 			}
 		}
 	}

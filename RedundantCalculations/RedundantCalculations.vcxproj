@@ -150,6 +150,7 @@
     <ClInclude Include="BlocksConsumer.h" />
     <ClInclude Include="BlocksProducer.h" />
     <ClInclude Include="IAsyncProcessor.h" />
+    <ClInclude Include="Semaphore.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="typedefs.h" />

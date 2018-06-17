@@ -9,7 +9,7 @@
 class BlocksProducer:public IAsyncProcessor
 {
 public:
-	BlocksProducer(BlocksPoolPtr blocksDeque, MutexPtr dequeLock);
+	BlocksProducer(BlocksPoolPtr blocksDeque, MutexPtr dequeLock, int prodcuersCount, SemaphorePtr readSemaphore);
 	virtual void Start();
 	virtual void Stop();
 	virtual ~BlocksProducer();
@@ -23,7 +23,8 @@ private:
 	
 	MutexPtr dequeLock;
 	BlocksPoolPtr blocksDeque;
-
+	SemaphorePtr dequeReadSemaphore;
+	int producersCount;
 
 	//do Run() while this flag true
 	std::atomic_bool doRun = false;
