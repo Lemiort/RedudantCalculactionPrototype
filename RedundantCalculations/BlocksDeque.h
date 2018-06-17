@@ -17,7 +17,7 @@ enum CheckCrcResult
 class BlocksDeque
 {
 public:
-	BlocksDeque();
+	BlocksDeque(int maxBlocksCount);
 	virtual ~BlocksDeque();
 	shared_ptr<vector<uint8_t>> GetBlock(int index);
 	void PushBackBlock(shared_ptr<vector<uint8_t>> block);
@@ -30,5 +30,6 @@ private:
 	map<BlockPtr, CrcsPtr> crcsPtrs;
 	mutex blocksMutex;
 	mutex crcsMutex;
+	int maxBlocksCount = 0;
 };
 

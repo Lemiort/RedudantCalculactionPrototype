@@ -2,8 +2,9 @@
 #include "BlocksDeque.h"
 #include "typedefs.h"
 
-BlocksDeque::BlocksDeque()
+BlocksDeque::BlocksDeque(int maxBlocksCount = 0)
 {
+	this->maxBlocksCount = maxBlocksCount;
 }
 
 
@@ -28,6 +29,9 @@ void BlocksDeque::PushBackBlock(shared_ptr<vector<uint8_t>> block)
 {
 	lock_guard<mutex> lock(blocksMutex);
 	lock_guard<mutex> lock2(crcsMutex);
+	if (maxBlocksCount != 0 && maxBlocksCount <= this->blocksPtrs.size())
+		throw std::out_of_range("Trying to push more blocks then BlocksDeque can store");
+
 	this->blocksPtrs.insert(block);
 	this->crcsPtrs.insert(pair<BlockPtr, CrcsPtr>(
 												block, 

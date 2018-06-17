@@ -32,7 +32,14 @@ void BlocksProducer::Run()
 		if (this->blocksDeque->GetBlocksCount() < this->blocksCount)
 		{
 			BlockPtr block = this->GenerateBlock();
-			this->blocksDeque->PushBackBlock(block);
+			try
+			{
+				this->blocksDeque->PushBackBlock(block);
+			}
+			catch (std::out_of_range ex)
+			{
+				//its ok, just a race
+			}
 		}
 	}
 }
