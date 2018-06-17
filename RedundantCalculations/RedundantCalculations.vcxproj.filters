@@ -33,9 +33,6 @@
     <ClInclude Include="IAsyncProcessor.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Semaphore.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="BlocksDeque.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
