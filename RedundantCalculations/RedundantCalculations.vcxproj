@@ -148,6 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BlocksConsumer.h" />
+    <ClInclude Include="BlocksDeque.h" />
     <ClInclude Include="BlocksProducer.h" />
     <ClInclude Include="IAsyncProcessor.h" />
     <ClInclude Include="Semaphore.h" />
@@ -157,6 +158,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BlocksConsumer.cpp" />
+    <ClCompile Include="BlocksDeque.cpp" />
     <ClCompile Include="BlocksProducer.cpp" />
     <ClCompile Include="RedundantCalculations.cpp" />
     <ClCompile Include="stdafx.cpp">

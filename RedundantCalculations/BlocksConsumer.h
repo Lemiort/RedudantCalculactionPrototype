@@ -4,24 +4,21 @@
 #include <stdint.h>
 #include "IAsyncProcessor.h"
 #include <atomic>
-#include "Semaphore.h"
-
+#include "BlocksDeque.h"
+#include <set>
 
 class BlocksConsumer: public IAsyncProcessor
 {
 public:
-	BlocksConsumer(BlocksPoolPtr blocksDeque, MutexPtr dequeWriteFlag, SemaphorePtr readSemaphore, BlocksCrcsPtr blocksCrcs, MutexPtr crcsLock);
+	BlocksConsumer(std::shared_ptr<BlocksDeque> blocksDeque);
 	~BlocksConsumer();
 	virtual void Start();
 	virtual void Stop();
-	BlocksPoolPtr blocksDeque;
-	BlocksCrcsPtr blocksCrcs;
 private:
 	virtual void Run();
 	uint32_t Crc32(BlockPtr block);
-	MutexPtr blocksDequeLock;
-	MutexPtr crcsLock;
-	SemaphorePtr dequeReadSemaphore;
+	std::shared_ptr<BlocksDeque> blocksDeque;
+	std::set<BlockPtr> processedBlocks;
 
 	//do Run() while this flag true
 	std::atomic_bool doRun = false;
