@@ -3,7 +3,7 @@
 #include <thread>
 #include <random>
 
-BlocksProducer::BlocksProducer(std::shared_ptr<BlocksDeque> blocksDeque)
+BlocksProducer::BlocksProducer(std::shared_ptr<BlocksPool> blocksDeque)
 {
 	this->blocksDeque = blocksDeque;
 }
@@ -29,7 +29,7 @@ void BlocksProducer::Run()
 {
 	while (doRun)
 	{
-		if (this->blocksDeque->GetBlocksCount() < this->blocksCount)
+		if (this->blocksDeque->GetBlocksGlobalCounter() < this->blocksCount)
 		{
 			BlockPtr block = this->GenerateBlock();
 			try

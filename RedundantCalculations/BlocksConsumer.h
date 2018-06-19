@@ -4,20 +4,20 @@
 #include <stdint.h>
 #include "IAsyncProcessor.h"
 #include <atomic>
-#include "BlocksDeque.h"
+#include "BlocksPool.h"
 #include <set>
 
 class BlocksConsumer: public IAsyncProcessor
 {
 public:
-	BlocksConsumer(std::shared_ptr<BlocksDeque> blocksDeque);
+	BlocksConsumer(std::shared_ptr<BlocksPool> blocksDeque);
 	~BlocksConsumer();
 	virtual void Start();
 	virtual void Stop();
 private:
 	virtual void Run();
 	uint32_t Crc32(BlockPtr block);
-	std::shared_ptr<BlocksDeque> blocksDeque;
+	std::shared_ptr<BlocksPool> blocksDeque;
 	std::set<BlockPtr> processedBlocks;
 
 	//do Run() while this flag true

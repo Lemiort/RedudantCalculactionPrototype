@@ -8,7 +8,7 @@
 /* CRC-32 (Ethernet, ZIP, etc.) polynomial in reversed bit order. */
 /* #define POLY 0xedb88320 */
 
-BlocksConsumer::BlocksConsumer(std::shared_ptr<BlocksDeque> blocksDeque)
+BlocksConsumer::BlocksConsumer(std::shared_ptr<BlocksPool> blocksDeque)
 {
 	this->blocksDeque = blocksDeque;
 }

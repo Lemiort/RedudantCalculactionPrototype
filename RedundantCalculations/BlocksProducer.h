@@ -3,13 +3,13 @@
 #include <mutex>
 #include <atomic>
 #include "IAsyncProcessor.h"
-#include "BlocksDeque.h"
+#include "BlocksPool.h"
 
 
 class BlocksProducer:public IAsyncProcessor
 {
 public:
-	BlocksProducer(std::shared_ptr<BlocksDeque> blocksDeque);
+	BlocksProducer(std::shared_ptr<BlocksPool> blocksDeque);
 	virtual void Start();
 	virtual void Stop();
 	virtual ~BlocksProducer();
@@ -20,7 +20,7 @@ private:
 	//infinite loop
 	virtual void Run();
 	BlockPtr GenerateBlock();
-	std::shared_ptr<BlocksDeque> blocksDeque;
+	std::shared_ptr<BlocksPool> blocksDeque;
 
 
 	//do Run() while this flag true
